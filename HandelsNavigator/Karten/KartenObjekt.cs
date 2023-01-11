@@ -29,7 +29,18 @@ namespace HandelsNavigator.Karten
 
         public string Label
         {
-            get { return label; }
+            get { 
+                
+                if (LabelZeigen)
+                {
+                    return label;
+                }
+                else
+                {
+                    return "";
+                }
+            
+            }
         }
 
 
@@ -37,8 +48,28 @@ namespace HandelsNavigator.Karten
         public KartenObjekt(Vector2 Position, Vector2 Groesse, string Label)
         {
 
-            groesse = Groesse;
-            position = Position;
+            if (Groesse.X < 0.0f | Groesse.Y < 0.0f)
+            {
+                Groesse.X = 0.0f;
+                Groesse.Y = 0.0f;
+                groesse = Groesse;
+            }
+            else
+            {
+                groesse = Groesse;
+            }
+
+            if(Position.X < 0.0f | Position.Y < 0.0f)
+            {
+                Position.X = 0.0f;
+                Position.Y = 0.0f;
+                position = Position;
+            }
+            else
+            {
+                position = Position;
+            }
+
             label = Label;
 
 

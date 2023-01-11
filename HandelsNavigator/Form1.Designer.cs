@@ -34,9 +34,10 @@
             // 
             // PCBTest
             // 
-            this.PCBTest.Location = new System.Drawing.Point(12, 12);
+            this.PCBTest.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.PCBTest.Location = new System.Drawing.Point(0, 0);
             this.PCBTest.Name = "PCBTest";
-            this.PCBTest.Size = new System.Drawing.Size(776, 426);
+            this.PCBTest.Size = new System.Drawing.Size(800, 450);
             this.PCBTest.TabIndex = 0;
             this.PCBTest.TabStop = false;
             // 
