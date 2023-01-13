@@ -84,8 +84,15 @@ namespace HandelsNavigator.Karten
                 if (obj.Label.Contains("Debug"))
                     stiftZuBenutzen = stiftDebug;
 
-                grafik.DrawRectangle(stiftZuBenutzen, VonGridNachPixelKonvertieren(obj.Position).X, VonGridNachPixelKonvertieren(obj.Position).Y, VonGridNachPixelKonvertieren(obj.Groesse).X, VonGridNachPixelKonvertieren(obj.Groesse).Y);
-                grafik.DrawString(obj.Label, new Font(SystemFonts.DefaultFont, FontStyle.Bold), pinsel, new PointF(VonGridNachPixelKonvertieren(obj.Position).X + (VonGridNachPixelKonvertieren(obj.Groesse).X / 2), VonGridNachPixelKonvertieren(obj.Position).Y + (VonGridNachPixelKonvertieren(obj.Groesse).Y / 2)));
+                if(obj.Typ == "NaviLinie")
+                {
+                    grafik.DrawLine(stiftZuBenutzen, VonGridNachPixelKonvertieren(obj.Position).X, VonGridNachPixelKonvertieren(obj.Position).Y, VonGridNachPixelKonvertieren(obj.Groesse).X, VonGridNachPixelKonvertieren(obj.Groesse).Y);
+                }
+                else 
+                {
+                    grafik.DrawRectangle(stiftZuBenutzen, VonGridNachPixelKonvertieren(obj.Position).X, VonGridNachPixelKonvertieren(obj.Position).Y, VonGridNachPixelKonvertieren(obj.Groesse).X, VonGridNachPixelKonvertieren(obj.Groesse).Y);
+                    grafik.DrawString(obj.Label, new Font(SystemFonts.DefaultFont, FontStyle.Bold), pinsel, new PointF(VonGridNachPixelKonvertieren(obj.Position).X + (VonGridNachPixelKonvertieren(obj.Groesse).X / 2), VonGridNachPixelKonvertieren(obj.Position).Y + (VonGridNachPixelKonvertieren(obj.Groesse).Y / 2)));
+                }                
             }
 
             return karte;
@@ -178,11 +185,11 @@ namespace HandelsNavigator.Karten
 
                     if (i == pfad.Count - 1)
                     {
-                        objLinie = new KartenObjekt(pfad[i], pfad[i] - pfad[i + 1], $"Debug {i}L");
+                        objLinie = new KartenObjekt(pfad[i], new Vector2(0.05f, 0.05f), $"Debug {i}L", "NaviLinie");
                     }
                     else
                     {
-                        objLinie = new KartenObjekt(pfad[i], new Vector2(0.05f, 0.05f), $"Debug {i}L");
+                        objLinie = new KartenObjekt(pfad[i], pfad[i + 1], $"Debug {i}L", "NaviLinie");
                     }
                     kartenObjekte.Add(objLinie);
                 }

@@ -17,6 +17,8 @@ namespace HandelsNavigator.Karten
 
         public bool LabelZeigen = true;
 
+        string typ = "Regal";
+
 
         public Vector2 Groesse
         {
@@ -43,6 +45,8 @@ namespace HandelsNavigator.Karten
             }
         }
 
+        public string Typ
+        { get { return typ; } }
 
 
         public KartenObjekt(Vector2 Position, Vector2 Groesse, string Label)
@@ -72,6 +76,13 @@ namespace HandelsNavigator.Karten
 
             label = Label;
 
+
+        }
+
+        public KartenObjekt(Vector2 Position, Vector2 Groesse, string Label, string Typ):this(Position,Groesse,Label)
+        {
+
+            this.typ = Typ;
 
         }
 

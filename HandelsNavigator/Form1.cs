@@ -20,7 +20,7 @@ namespace HandelsNavigator
             PCBTest.SizeMode = PictureBoxSizeMode.Zoom;
 
             manager = new KartenManager(1920, 1080);
-            manager.DebugKnotenpunkteZeigen = true;
+            //manager.DebugKnotenpunkteZeigen = true;
 
             //manager.DebugLinienHinzufuegen();
 
