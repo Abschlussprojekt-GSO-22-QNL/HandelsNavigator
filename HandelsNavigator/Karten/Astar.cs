@@ -13,6 +13,18 @@ namespace HandelsNavigator.Karten
     {
 
         private List<NavigationsKnotenpunkt> navigationsKnotenpunkte;
+        static private List<NavigationsKnotenpunkt> nichtGefundeneNachbarn = new List<NavigationsKnotenpunkt>();
+        static private List<NavigationsKnotenpunkt> nichtBetretbar = new List<NavigationsKnotenpunkt>();
+
+        public List<NavigationsKnotenpunkt> NichtGefundeneNachbarn
+        {
+            get { return nichtGefundeneNachbarn; }
+        }
+
+        public List<NavigationsKnotenpunkt> NichtBetretbareNachbarn
+        {
+            get { return nichtBetretbar; }
+        }
 
 
         public Astar(List<NavigationsKnotenpunkt> navigationsKnotenpunke) 
@@ -35,9 +47,10 @@ namespace HandelsNavigator.Karten
             while(aktiveKnotenpunkte.Any())
             {
 
-                var ueberpruefungsKnotenpunkt = aktiveKnotenpunkte.OrderBy(x => x.KostenDistanz).First();
+                var ueberpruefungsKnotenpunkt = aktiveKnotenpunkte.OrderByDescending(x => x.KostenDistanz).Last();
 
-                if(ueberpruefungsKnotenpunkt.X == ziel.X && ueberpruefungsKnotenpunkt.Y == ziel.Y)
+                //if(ueberpruefungsKnotenpunkt.X == ziel.X && ueberpruefungsKnotenpunkt.Y == ziel.Y)
+                if(ueberpruefungsKnotenpunkt.X >= ziel.X - 0.02f && ueberpruefungsKnotenpunkt.X <= ziel.X + 0.02f && ueberpruefungsKnotenpunkt.Y >= ziel.Y - 0.02f && ueberpruefungsKnotenpunkt.Y <= ziel.Y + 0.02f)
                 {
 
                     var knotenpunkt = ueberpruefungsKnotenpunkt;
@@ -66,15 +79,17 @@ namespace HandelsNavigator.Karten
                 foreach(var betretbarerKnotenpunkt in betretbareKnotenpunkte)
                 {
                     if (besuchteKnotenpunkte.Any(x => x.X == betretbarerKnotenpunkt.X && x.Y == betretbarerKnotenpunkt.Y))
+                    {
                         continue;
+                    }
 
                     if (aktiveKnotenpunkte.Any(x => x.X == betretbarerKnotenpunkt.X && x.Y == betretbarerKnotenpunkt.Y))
                     {
                         var bestehenderKnotenpunkt = aktiveKnotenpunkte.First(x => x.X == betretbarerKnotenpunkt.X && x.Y == betretbarerKnotenpunkt.Y);
-                        if (bestehenderKnotenpunkt.KostenDistanz > bestehenderKnotenpunkt.KostenDistanz)
+                        if (bestehenderKnotenpunkt.KostenDistanz > betretbarerKnotenpunkt.KostenDistanz)
                         {
                             aktiveKnotenpunkte.Remove(bestehenderKnotenpunkt);
-                            aktiveKnotenpunkte.Add(bestehenderKnotenpunkt);
+                            aktiveKnotenpunkte.Add(betretbarerKnotenpunkt);
                         }
                     }
                     else
@@ -107,27 +122,43 @@ namespace HandelsNavigator.Karten
             moeglicheKnotenpunkte.ForEach(knotenpunkt => knotenpunkt.DistanzSetzen(zielKnotenpunkt.X, zielKnotenpunkt.Y));
 
 
-            foreach(NavigationsKnotenpunkt knotenpunkt in moeglicheKnotenpunkte)
+            //foreach(NavigationsKnotenpunkt knotenpunkt in moeglicheKnotenpunkte)
+            for(int i = moeglicheKnotenpunkte.Count -1; i > -1; i--)
             {
 
-                if(
-                    knotenpunkte
-                        .Where(knoten => knoten.X >= (knotenpunkt.X - 0.001f) && knoten.X <= (knotenpunkt.X + 0.001f))
-                        .Where(knoten => knoten.Y >= (knotenpunkt.Y - 0.001f) && knoten.Y <= (knotenpunkt.Y + 0.001f)).ToList().Count > 0
-                        )
-                            knotenpunkt.Besetzt = knotenpunkte
-                            .Where(knoten => knoten.X >= (knotenpunkt.X - 0.001f) && knoten.X <= (knotenpunkt.X + 0.001f))
-                            .Where(knoten => knoten.Y >= (knotenpunkt.Y - 0.001f) && knoten.Y <= (knotenpunkt.Y + 0.001f))
-                            .First().Besetzt;
+                if (moeglicheKnotenpunkte[i].X < 0f || moeglicheKnotenpunkte[i].Y < 0f)
+                {
+                    moeglicheKnotenpunkte.Remove(moeglicheKnotenpunkte[i]);
+                }
+                if(knotenpunkte.Count > 0)
+                    if (
+                        knotenpunkte
+                            .Where(knoten => knoten.X >= (moeglicheKnotenpunkte[i].X - 0.002f) && knoten.X <= (moeglicheKnotenpunkte[i].X + 0.002f))
+                            .Where(knoten => knoten.Y >= (moeglicheKnotenpunkte[i].Y - 0.002f) && knoten.Y <= (moeglicheKnotenpunkte[i].Y + 0.002f)).ToList().Count() > 0
+                            )
+                    {
+                        moeglicheKnotenpunkte[i].Besetzt = knotenpunkte
+                        .Where(knoten => knoten.X >= (moeglicheKnotenpunkte[i].X - 0.001f) && knoten.X <= (moeglicheKnotenpunkte[i].X + 0.001f))
+                        .Where(knoten => knoten.Y >= (moeglicheKnotenpunkte[i].Y - 0.001f) && knoten.Y <= (moeglicheKnotenpunkte[i].Y + 0.001f))
+                        .First().Besetzt;
+                        Debug.WriteLine("Kontenpunktstatus übertragen");                    
+                    }
+                    else
+                    {
+                        Debug.WriteLine("Nachbar nicht gefunden");
+                        nichtGefundeneNachbarn.Add(moeglicheKnotenpunkte[i]);
+                        moeglicheKnotenpunkte.Remove(moeglicheKnotenpunkte[i]);
+                    }
+
             }
 
 
 
-                Debug.WriteLine("Kontenpunktstatus übertragen");
+                
 
 
-            var maxX = 0.95f;
-            var maxY = 0.95f;
+            var maxX = 0.96f;
+            var maxY = 0.96f;
 
             return moeglicheKnotenpunkte
                 .Where(knotenpunkt => knotenpunkt.X >= 0 && knotenpunkt.X <= maxX)

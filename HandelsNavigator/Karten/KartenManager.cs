@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.Serialization;
+using System.Diagnostics;
 
 namespace HandelsNavigator.Karten
 {
@@ -14,6 +15,7 @@ namespace HandelsNavigator.Karten
     {
 
         public bool DebugKnotenpunkteZeigen = false;
+        float navigationsrasterGröße = 0.1f;
 
         Vector2 groesse = new Vector2(2000,2000);
 
@@ -40,15 +42,27 @@ namespace HandelsNavigator.Karten
         }
 
 
-        public KartenManager(int AufloesungX, int AufloesungY)
+        public KartenManager(int AufloesungX, int AufloesungY, float navigationsrasterGröße)
         {
 
             groesse.X = AufloesungX;
             groesse.Y = AufloesungY;
+            if (navigationsrasterGröße > 0.5f)
+            {
+                navigationsrasterGröße = 0.5f;
+            }
+            else
+            {
+                this.navigationsrasterGröße = navigationsrasterGröße;
+            }
+
+
+
             this.knotenpunkte = KnotenpunkteGenerieren();
 
             astar = new Astar(knotenpunkte);
 
+            
         }
 
 
@@ -62,6 +76,7 @@ namespace HandelsNavigator.Karten
 
             Pen stift = new Pen(Color.FromKnownColor(KnownColor.Black), 2);
             Pen stiftDebug = new Pen(Color.FromKnownColor(KnownColor.Red), 2);
+            Pen stiftBesetzt = new Pen(Color.FromKnownColor(KnownColor.Pink), 2);
             Brush pinsel = new SolidBrush(Color.FromKnownColor(KnownColor.Black));
 
             if (DebugKnotenpunkteZeigen)
@@ -80,11 +95,18 @@ namespace HandelsNavigator.Karten
             foreach(KartenObjekt obj in kartenObjekte)
             {
                 Pen stiftZuBenutzen = stift;
+                pinsel = new SolidBrush(Color.FromKnownColor(KnownColor.Black));
 
                 if (obj.Label.Contains("Debug"))
                     stiftZuBenutzen = stiftDebug;
+                if (obj.Label.Contains("KNOTENPUNKT BESETZT"))
+                {
+                    stiftZuBenutzen = stiftBesetzt;
+                    pinsel = new SolidBrush(Color.FromKnownColor(KnownColor.Pink));
+                }
 
-                if(obj.Typ == "NaviLinie")
+
+                    if (obj.Typ == "NaviLinie")
                 {
                     grafik.DrawLine(stiftZuBenutzen, VonGridNachPixelKonvertieren(obj.Position).X, VonGridNachPixelKonvertieren(obj.Position).Y, VonGridNachPixelKonvertieren(obj.Groesse).X, VonGridNachPixelKonvertieren(obj.Groesse).Y);
                 }
@@ -132,13 +154,13 @@ namespace HandelsNavigator.Karten
         public void DebugLinienHinzufuegen()
         {
             //Vertikal
-            for(float i = 0.0f;i < 1.0f;i += 0.1f)
+            for(float i = 0.0f;i < 1.1f;i += 0.1f)
             {
                 KartenObjekt objVert = new KartenObjekt(new Vector2(0.0f,i),new Vector2(1.0f, 0.001f), $"Debug {i}v");
                 kartenObjekte.Add(objVert);
             }
             //Horizontal
-            for (float i = 0.0f; i < 1.0f; i += 0.1f)
+            for (float i = 0.0f; i < 1.1f; i += 0.1f)
             {
                 KartenObjekt objHori = new KartenObjekt(new Vector2(i, 0.0f), new Vector2(0.001f, 1.0f), $"Debug {i}h");
                 kartenObjekte.Add(objHori);
@@ -151,9 +173,9 @@ namespace HandelsNavigator.Karten
 
             List<NavigationsKnotenpunkt> knotenpunkte = new List<NavigationsKnotenpunkt>();
 
-            for (float x = 0.05f; x < 0.95f; x += 0.1f)
+            for (float x = 0.05f; x < 0.96f; x += navigationsrasterGröße)
             {
-                for (float y = 0.05f; y < 0.95f; y += 0.1f)
+                for (float y = 0.05f; y < 0.96f; y += navigationsrasterGröße)
                 {
                     NavigationsKnotenpunkt kontenpunkt = new NavigationsKnotenpunkt(x,y);
                     knotenpunkte.Add(kontenpunkt);
@@ -165,16 +187,19 @@ namespace HandelsNavigator.Karten
         }
 
 
-        public void PfadDarstellen(Vector2 ziel, Vector2 start)
+        public void PfadDarstellen(Vector2 start, Vector2 ziel)
         {
 
             List<Vector2> pfad = new List<Vector2>();
+            var startKnotenpunkt = NahstenKnotenpunktFinden(start);
+            var zielKnotenpunkt = NahstenKnotenpunktFinden(ziel);
 
-            var startKnotenpunkt = knotenpunkte.First();
-            var zielKnotenpunkt = knotenpunkte.Last();
+            KartenObjekt objDebug = new KartenObjekt(new Vector2(startKnotenpunkt.X,startKnotenpunkt.Y), new Vector2(0.01f, 0.01f), "DEBUG START");
+            kartenObjekte.Add(objDebug);
+            objDebug = new KartenObjekt(new Vector2(zielKnotenpunkt.X, zielKnotenpunkt.Y), new Vector2(0.01f, 0.01f), "DEBUG ENDE");
+            kartenObjekte.Add(objDebug);
 
-
-             pfad = astar.PfadBerechnen(startKnotenpunkt,zielKnotenpunkt);
+            pfad = astar.PfadBerechnen(startKnotenpunkt,zielKnotenpunkt);
 
             if (pfad != null)
             {
@@ -196,11 +221,77 @@ namespace HandelsNavigator.Karten
             }
             else
             {
-                MessageBox.Show("Es konnte keine mögliche Route gefunden werden!", "Fehler!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //throw new Exception("Route nicht kalkulierbar!");
+                MessageBox.Show("Nicht möglich.");
+            }
+
+            if(!DebugKnotenpunkteZeigen)
+                if (astar.NichtGefundeneNachbarn.Count > 0)
+                {
+                    for (int i = 0; i < astar.NichtGefundeneNachbarn.Count - 1; i++)
+                    {
+
+                        KartenObjekt objFehlerKnoten = new KartenObjekt(new Vector2(0f, 0f), new Vector2(0f, 0f), "");
+
+
+                       objFehlerKnoten = new KartenObjekt(new Vector2(astar.NichtGefundeneNachbarn[i].X, astar.NichtGefundeneNachbarn[i].Y), new Vector2(0.01f, 0.01f), $"Nicht gefunden {i}FN", "NICHT GEFUNDENER KNOTENPUNKT");
+
+
+                        kartenObjekte.Add(objFehlerKnoten);
+                    }
+                }
+                else
+                {
+                    Debug.WriteLine("Alle Nachbarn gefunden :)");
+                }
+            if (astar.NichtBetretbareNachbarn.Count > 0)
+            {
+                for (int i = 0; i < astar.NichtBetretbareNachbarn.Count - 1; i++)
+                {
+
+                    KartenObjekt objFehlerKnoten = new KartenObjekt(new Vector2(0f, 0f), new Vector2(0f, 0f), "");
+
+
+                    objFehlerKnoten = new KartenObjekt(new Vector2(astar.NichtBetretbareNachbarn[i].X, astar.NichtBetretbareNachbarn[i].Y), new Vector2(0.01f, 0.01f), $"Nicht gefunden {i}FN", "NICHT BETRETBARER KNOTENPUNKT");
+
+
+                    kartenObjekte.Add(objFehlerKnoten);
+                }
+            }
+            else
+            {
+                Debug.WriteLine("Alle Nachbarn gefunden :)");
             }
 
 
 
+        }
+
+        private NavigationsKnotenpunkt NahstenKnotenpunktFinden(Vector2 vec)
+        {
+
+            var letztBesteEntfernung = float.MaxValue;
+            var letztBesterKnotenpunkt = new NavigationsKnotenpunkt();
+
+
+            foreach(NavigationsKnotenpunkt knoten in knotenpunkte)
+            {
+                var entf = Vector2.Distance(vec, new Vector2(knoten.X, knoten.Y));
+
+                if (entf < 0)
+                    entf = entf * (-1);
+
+                if(entf < letztBesteEntfernung) 
+                {
+                    letztBesteEntfernung = entf;
+                    letztBesterKnotenpunkt = knoten;
+                }
+
+            }
+
+
+
+            return letztBesterKnotenpunkt;
         }
 
 
