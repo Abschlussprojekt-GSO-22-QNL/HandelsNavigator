@@ -30,7 +30,7 @@ namespace HandelsNavigator
             manager.ObjektHinzufügen(testObjekt);
             testObjekt = new KartenObjekt(new Vector2(0.2f, 0.0f), new Vector2(0.1f, 0.3f), "Test-Objekt 3");
             manager.ObjektHinzufügen(testObjekt);
-            testObjekt = new KartenObjekt(new Vector2(0.6f, 0.3f), new Vector2(0.1f, 0.6f), "Test-Objekt 4");
+            testObjekt = new KartenObjekt(new Vector2(0.6f, 0.3f), new Vector2(0.1f, 0.7f), "Test-Objekt 4");
             manager.ObjektHinzufügen(testObjekt);
             testObjekt = new KartenObjekt(new Vector2(0.7f, 0.3f), new Vector2(0.1f, 0.1f), "Test-Objekt 5");
             manager.ObjektHinzufügen(testObjekt);
@@ -42,6 +42,8 @@ namespace HandelsNavigator
             manager.ObjektHinzufügen(testObjekt);
             testObjekt = new KartenObjekt(new Vector2(0.4f, 0.6f), new Vector2(0.1f, 0.1f), "Test-Objekt 9");
             manager.ObjektHinzufügen(testObjekt);
+            testObjekt = new KartenObjekt(new Vector2(0.95f, 0.0f), new Vector2(0.1f, 1f), "Test-Objekt 10");
+            manager.ObjektHinzufügen(testObjekt);
 
 
             //KartenObjekt testObjekt = new KartenObjekt(new Vector2(0.0f, 0.0f), new Vector2(0.2f, 0.1f), "Test-Objekt 1");
@@ -49,7 +51,7 @@ namespace HandelsNavigator
 
 
 
-            manager.PfadDarstellen(new Vector2(0.0f,0.0f), new Vector2(0.35f, 0.7f));
+            manager.PfadDarstellen(new Vector2(0.8f,0.95f), new Vector2(0.35f, 0.7f));
             
 
 
