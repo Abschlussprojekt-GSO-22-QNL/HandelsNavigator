@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -104,6 +105,26 @@ namespace HandelsNavigator.Karten
 
 
             moeglicheKnotenpunkte.ForEach(knotenpunkt => knotenpunkt.DistanzSetzen(zielKnotenpunkt.X, zielKnotenpunkt.Y));
+
+
+            foreach(NavigationsKnotenpunkt knotenpunkt in moeglicheKnotenpunkte)
+            {
+
+                if(
+                    knotenpunkte
+                        .Where(knoten => knoten.X >= (knotenpunkt.X - 0.001f) && knoten.X <= (knotenpunkt.X + 0.001f))
+                        .Where(knoten => knoten.Y >= (knotenpunkt.Y - 0.001f) && knoten.Y <= (knotenpunkt.Y + 0.001f)).ToList().Count > 0
+                        )
+                            knotenpunkt.Besetzt = knotenpunkte
+                            .Where(knoten => knoten.X >= (knotenpunkt.X - 0.001f) && knoten.X <= (knotenpunkt.X + 0.001f))
+                            .Where(knoten => knoten.Y >= (knotenpunkt.Y - 0.001f) && knoten.Y <= (knotenpunkt.Y + 0.001f))
+                            .First().Besetzt;
+            }
+
+
+
+                Debug.WriteLine("Kontenpunktstatus übertragen");
+
 
             var maxX = 0.95f;
             var maxY = 0.95f;

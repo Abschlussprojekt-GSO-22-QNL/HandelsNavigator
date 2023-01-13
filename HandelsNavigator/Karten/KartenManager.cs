@@ -169,21 +169,27 @@ namespace HandelsNavigator.Karten
 
              pfad = astar.PfadBerechnen(startKnotenpunkt,zielKnotenpunkt);
 
-
-            for(int i = 0; i < pfad.Count-1; i++) 
+            if (pfad != null)
             {
-
-                KartenObjekt objLinie = new KartenObjekt(new Vector2(0f, 0f), new Vector2(0f, 0f), "");
-
-                if (i == pfad.Count - 1)
+                for (int i = 0; i < pfad.Count - 1; i++)
                 {
-                    objLinie = new KartenObjekt(pfad[i], pfad[i] - pfad[i + 1], $"Debug {i}L");
+
+                    KartenObjekt objLinie = new KartenObjekt(new Vector2(0f, 0f), new Vector2(0f, 0f), "");
+
+                    if (i == pfad.Count - 1)
+                    {
+                        objLinie = new KartenObjekt(pfad[i], pfad[i] - pfad[i + 1], $"Debug {i}L");
+                    }
+                    else
+                    {
+                        objLinie = new KartenObjekt(pfad[i], new Vector2(0.05f, 0.05f), $"Debug {i}L");
+                    }
+                    kartenObjekte.Add(objLinie);
                 }
-                else
-                {
-                    objLinie = new KartenObjekt(pfad[i], new Vector2(0.05f,0.05f), $"Debug {i}L");
-                }
-                kartenObjekte.Add(objLinie);
+            }
+            else
+            {
+                MessageBox.Show("Es konnte keine mögliche Route gefunden werden!", "Fehler!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
 
