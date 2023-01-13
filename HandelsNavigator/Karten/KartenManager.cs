@@ -13,10 +13,14 @@ namespace HandelsNavigator.Karten
     internal class KartenManager
     {
 
+        public bool DebugKnotenpunkteZeigen = false;
 
         Vector2 groesse = new Vector2(2000,2000);
 
         List<KartenObjekt> kartenObjekte = new List<KartenObjekt>();
+        List<NavigationsKnotenpunkt> knotenpunkte = new List<NavigationsKnotenpunkt>();
+
+        Astar astar = new Astar(new List<NavigationsKnotenpunkt>());
 
 
 
@@ -41,6 +45,9 @@ namespace HandelsNavigator.Karten
 
             groesse.X = AufloesungX;
             groesse.Y = AufloesungY;
+            this.knotenpunkte = KnotenpunkteGenerieren();
+
+            astar = new Astar(knotenpunkte);
 
         }
 
@@ -56,6 +63,17 @@ namespace HandelsNavigator.Karten
             Pen stift = new Pen(Color.FromKnownColor(KnownColor.Black), 2);
             Pen stiftDebug = new Pen(Color.FromKnownColor(KnownColor.Red), 2);
             Brush pinsel = new SolidBrush(Color.FromKnownColor(KnownColor.Black));
+
+            if (DebugKnotenpunkteZeigen)
+            {
+                foreach (NavigationsKnotenpunkt knoten in knotenpunkte)
+                {
+                    KartenObjekt obj = new KartenObjekt(new Vector2(knoten.X, knoten.Y), new Vector2(0.01f, 0.01f), "KNOTENPUNKT");
+                    if(knoten.Besetzt)
+                        obj = new KartenObjekt(new Vector2(knoten.X, knoten.Y), new Vector2(0.01f, 0.01f), "KNOTENPUNKT BESETZT");
+                    kartenObjekte.Add(obj);
+                }
+            }
 
             grafik.FillRectangle(Brushes.White,0,0,karte.Width,karte.Height);
 
@@ -95,6 +113,13 @@ namespace HandelsNavigator.Karten
         public void ObjektHinzufügen(KartenObjekt obj)
         {
             kartenObjekte.Add(obj);
+
+            var zuSperrendeKnotenpunkte = knotenpunkte.Where(x => x.X >= obj.Position.X && x.X <= obj.Position.X + obj.Groesse.X && x.Y >= obj.Position.Y && x.Y <= obj.Position.Y + obj.Groesse.Y).ToList();
+
+            foreach(NavigationsKnotenpunkt knoten in zuSperrendeKnotenpunkte)
+            {
+                knoten.Besetzt = true;
+            }
         }
 
         public void DebugLinienHinzufuegen()
@@ -114,19 +139,54 @@ namespace HandelsNavigator.Karten
             
         }
 
-        public void DebugKnotenpunkteHinzufuegen()
+        private List<NavigationsKnotenpunkt> KnotenpunkteGenerieren()
         {
-            //Vertikal
-            for (float i = 0.05f; i < 0.95f; i += 0.1f)
+
+            List<NavigationsKnotenpunkt> knotenpunkte = new List<NavigationsKnotenpunkt>();
+
+            for (float x = 0.05f; x < 0.95f; x += 0.1f)
             {
-                for (float z = 0.05f; z < 0.95f; z += 0.1f)
+                for (float y = 0.05f; y < 0.95f; y += 0.1f)
                 {
-                    KartenObjekt kontenpunkt = new KartenObjekt(new Vector2(i, z), new Vector2(0.01f, 0.01f), $"K({i},{z})");
-                    kartenObjekte.Add(kontenpunkt);
+                    NavigationsKnotenpunkt kontenpunkt = new NavigationsKnotenpunkt(x,y);
+                    knotenpunkte.Add(kontenpunkt);
                 }
             }
-            //Horizontal
-            
+
+
+            return knotenpunkte;
+        }
+
+
+        public void PfadDarstellen(Vector2 ziel, Vector2 start)
+        {
+
+            List<Vector2> pfad = new List<Vector2>();
+
+            var startKnotenpunkt = knotenpunkte.First();
+            var zielKnotenpunkt = knotenpunkte.Last();
+
+
+             pfad = astar.PfadBerechnen(startKnotenpunkt,zielKnotenpunkt);
+
+
+            for(int i = 0; i < pfad.Count-1; i++) 
+            {
+
+                KartenObjekt objLinie = new KartenObjekt(new Vector2(0f, 0f), new Vector2(0f, 0f), "");
+
+                if (i == pfad.Count - 1)
+                {
+                    objLinie = new KartenObjekt(pfad[i], pfad[i] - pfad[i + 1], $"Debug {i}L");
+                }
+                else
+                {
+                    objLinie = new KartenObjekt(pfad[i], new Vector2(0.05f,0.05f), $"Debug {i}L");
+                }
+                kartenObjekte.Add(objLinie);
+            }
+
+
 
         }
 

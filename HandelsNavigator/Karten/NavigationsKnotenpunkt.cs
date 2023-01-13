@@ -7,27 +7,42 @@ using System.Threading.Tasks;
 
 namespace HandelsNavigator.Karten
 {
-    internal class NavigationsKnotenpunkt
+    public class NavigationsKnotenpunkt
     {
 
-        Vector2 position = new Vector2(0, 0);
+        public float Kosten { get; set; }
 
-        public int Cost { get; set; }
-        public float Distance { get; set; }
-        public float CostDistance => Cost + Distance;
-        public NavigationsKnotenpunkt Parent { get; set; }
+        public bool Besetzt { get; set; }
+        public float Distanz { get; set; }
+        public float KostenDistanz => Kosten + Distanz;
+        public NavigationsKnotenpunkt UrsprungsKnotenpunkt { get; set; }
 
-        public Vector2 Position
+        public float X
         {
-            get { return position; }
+            get;set;
+        }
+
+        public float Y
+        {
+            get;set;
         }
 
 
-        public void SetDistance(int targetX, int targetY)
+        public void DistanzSetzen(float zielX, float zielY)
         {
-            this.Distance = Math.Abs(targetX - position.X) + Math.Abs(targetY - position.Y);
+            this.Distanz = Math.Abs(zielX - X) + Math.Abs(zielY - Y);
         }
 
+        public NavigationsKnotenpunkt(float x, float y)
+        { 
+            this.X = x;
+            this.Y = y;
+        }
+        public NavigationsKnotenpunkt()
+        {
+            this.X = 0;
+            this.Y = 0;
+        }
 
     }
 }
