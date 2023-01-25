@@ -25,10 +25,24 @@ namespace HandelsNavigator.Karten
         }
 
 
-        public Bitmap GrafikAngepasst(int groesseX, int groesseY)
+        public Bitmap GrafikAngepasst(int groesseX, int groesseY,bool linie)
         {
             try
             {
+
+                if(linie)
+                {
+                    if(groesseX > groesseY)
+                    {
+                        groesseY = 20;
+                    }
+                    else
+                    {
+                        groesseX = 20;
+                    }
+                }
+
+
 
                 Bitmap b = new Bitmap(groesseX, groesseY);
                 using (Graphics g = Graphics.FromImage((Image)b))

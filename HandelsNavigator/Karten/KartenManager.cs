@@ -74,9 +74,9 @@ namespace HandelsNavigator.Karten
             Graphics grafik = Graphics.FromImage(karte);
 
 
-            Pen stift = new Pen(Color.FromKnownColor(KnownColor.Black), 2);
-            Pen stiftDebug = new Pen(Color.FromKnownColor(KnownColor.Red), 2);
-            Pen stiftBesetzt = new Pen(Color.FromKnownColor(KnownColor.Pink), 2);
+            Pen stift = new Pen(Color.FromKnownColor(KnownColor.Black), 5);
+            Pen stiftDebug = new Pen(Color.FromKnownColor(KnownColor.Red), 5);
+            Pen stiftBesetzt = new Pen(Color.FromKnownColor(KnownColor.Pink), 5);
             Brush pinsel = new SolidBrush(Color.FromKnownColor(KnownColor.Black));
 
             if (DebugKnotenpunkteZeigen)
@@ -95,9 +95,14 @@ namespace HandelsNavigator.Karten
             foreach(KartenObjekt obj in kartenObjekte)
             {
 
+                bool linie = false;
+                if (obj.Typ == "NaviLinie")
+                    linie = true;
+
+
                 if(obj.Sprite != null)
                 {
-                    grafik.DrawImage(obj.Sprite.GrafikAngepasst((int)VonGridNachPixelKonvertieren(obj.Groesse).X, (int)VonGridNachPixelKonvertieren(obj.Groesse).Y), VonGridNachPixelKonvertieren(obj.Position).X, VonGridNachPixelKonvertieren(obj.Position).Y);
+                    grafik.DrawImage(obj.Sprite.GrafikAngepasst((int)VonGridNachPixelKonvertieren(obj.Groesse).X, (int)VonGridNachPixelKonvertieren(obj.Groesse).Y,linie), VonGridNachPixelKonvertieren(obj.Position).X, VonGridNachPixelKonvertieren(obj.Position).Y);
                     grafik.DrawString(obj.Label, new Font(SystemFonts.DefaultFont, FontStyle.Bold), pinsel, new PointF(VonGridNachPixelKonvertieren(obj.Position).X + (VonGridNachPixelKonvertieren(obj.Groesse).X / 2), VonGridNachPixelKonvertieren(obj.Position).Y + (VonGridNachPixelKonvertieren(obj.Groesse).Y / 2)));
                 }
                 else
@@ -222,7 +227,7 @@ namespace HandelsNavigator.Karten
 
                     if (i == pfad.Count - 1)
                     {
-                        objLinie = new KartenObjekt(pfad[i], new Vector2(0.05f, 0.05f), $"Debug {i}L", "NaviLinie");
+                        objLinie = new KartenObjekt(pfad[i], new Vector2(0.05f, 0.05f), $"Debug {i}L", "NaviLinie",new Sprite(HandelsNavigator.Properties.Resources.NavigationsEnde));
                     }
                     else
                     {
