@@ -15,9 +15,11 @@ namespace HandelsNavigator.Karten
 
         string label = "UNBENNANT";
 
+        string typ = "Regal";
+
         public bool LabelZeigen = true;
 
-        string typ = "Regal";
+        public Sprite? Sprite = null;
 
 
         public Vector2 Groesse
@@ -83,6 +85,12 @@ namespace HandelsNavigator.Karten
         {
 
             this.typ = Typ;
+
+        }
+        public KartenObjekt(Vector2 Position, Vector2 Groesse, string Label, string Typ, Sprite Sprite) : this(Position, Groesse, Label,Typ)
+        {
+
+            this.Sprite = Sprite;
 
         }
 

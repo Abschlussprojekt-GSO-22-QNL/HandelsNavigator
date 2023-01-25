@@ -24,25 +24,27 @@ namespace HandelsNavigator
 
             //manager.DebugLinienHinzufuegen();
 
-            KartenObjekt testObjekt = new KartenObjekt(new Vector2(0.5f, 0.2f), new Vector2(0.2f, 0.1f), "Test-Objekt 1");
+            Bitmap Regal = HandelsNavigator.Properties.Resources.Regal;
+
+            KartenObjekt testObjekt = new KartenObjekt(new Vector2(0.5f, 0.2f), new Vector2(0.2f, 0.1f), "Test-Objekt 1", "Regal", new Sprite(Regal));
             manager.ObjektHinzufügen(testObjekt);
-            testObjekt = new KartenObjekt(new Vector2(0.1f, 0.5f), new Vector2(0.4f, 0.1f), "Test-Objekt 2");
-            manager.ObjektHinzufügen(testObjekt);
-            testObjekt = new KartenObjekt(new Vector2(0.2f, 0.0f), new Vector2(0.1f, 0.3f), "Test-Objekt 3");
-            manager.ObjektHinzufügen(testObjekt);
-            testObjekt = new KartenObjekt(new Vector2(0.6f, 0.3f), new Vector2(0.1f, 0.7f), "Test-Objekt 4");
-            manager.ObjektHinzufügen(testObjekt);
-            testObjekt = new KartenObjekt(new Vector2(0.7f, 0.3f), new Vector2(0.1f, 0.1f), "Test-Objekt 5");
-            manager.ObjektHinzufügen(testObjekt);
-            testObjekt = new KartenObjekt(new Vector2(0.8f, 0.5f), new Vector2(0.1f, 0.1f), "Test-Objekt 6");
-            manager.ObjektHinzufügen(testObjekt);
-            testObjekt = new KartenObjekt(new Vector2(0.7f, 0.7f), new Vector2(0.1f, 0.1f), "Test-Objekt 7");
-            manager.ObjektHinzufügen(testObjekt);
-            testObjekt = new KartenObjekt(new Vector2(0.0f, 0.6f), new Vector2(0.1f, 0.1f), "Test-Objekt 8");
-            manager.ObjektHinzufügen(testObjekt);
-            testObjekt = new KartenObjekt(new Vector2(0.4f, 0.6f), new Vector2(0.1f, 0.1f), "Test-Objekt 9");
-            manager.ObjektHinzufügen(testObjekt);
-            testObjekt = new KartenObjekt(new Vector2(0.95f, 0.0f), new Vector2(0.1f, 1f), "Test-Objekt 10");
+            testObjekt = new KartenObjekt(new Vector2(0.1f, 0.5f), new Vector2(0.4f, 0.1f), "Test-Objekt 2","Regal", new Sprite(Regal));
+            manager.ObjektHinzufügen(testObjekt);                                                          
+            testObjekt = new KartenObjekt(new Vector2(0.2f, 0.0f), new Vector2(0.1f, 0.3f), "Test-Objekt 3","Regal", new Sprite(Regal));
+            manager.ObjektHinzufügen(testObjekt);                                                          
+            testObjekt = new KartenObjekt(new Vector2(0.6f, 0.3f), new Vector2(0.1f, 0.7f), "Test-Objekt 4","Regal", new Sprite(Regal));
+            manager.ObjektHinzufügen(testObjekt);                                                          
+            testObjekt = new KartenObjekt(new Vector2(0.7f, 0.3f), new Vector2(0.1f, 0.1f), "Test-Objekt 5","Regal", new Sprite(Regal)); ;
+            manager.ObjektHinzufügen(testObjekt);                                                          
+            testObjekt = new KartenObjekt(new Vector2(0.8f, 0.5f), new Vector2(0.1f, 0.1f), "Test-Objekt 6","Regal", new Sprite(Regal)); ;
+            manager.ObjektHinzufügen(testObjekt);                                                          
+            testObjekt = new KartenObjekt(new Vector2(0.7f, 0.7f), new Vector2(0.1f, 0.1f), "Test-Objekt 7","Regal", new Sprite(Regal)); ;
+            manager.ObjektHinzufügen(testObjekt);                                                          
+            testObjekt = new KartenObjekt(new Vector2(0.0f, 0.6f), new Vector2(0.1f, 0.1f), "Test-Objekt 8","Regal", new Sprite(Regal)); ;
+            manager.ObjektHinzufügen(testObjekt);                                                          
+            testObjekt = new KartenObjekt(new Vector2(0.4f, 0.6f), new Vector2(0.1f, 0.1f), "Test-Objekt 9","Regal", new Sprite(Regal)); ;
+            manager.ObjektHinzufügen(testObjekt);                                                          
+            testObjekt = new KartenObjekt(new Vector2(0.95f, 0.0f), new Vector2(0.1f, 1f), "Test-Objekt 10","Regal", new Sprite(Regal)); ;
             manager.ObjektHinzufügen(testObjekt);
 
 

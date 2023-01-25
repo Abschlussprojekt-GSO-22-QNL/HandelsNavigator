@@ -90,30 +90,40 @@ namespace HandelsNavigator.Karten
                 }
             }
 
-            grafik.FillRectangle(Brushes.White,0,0,karte.Width,karte.Height);
+            grafik.FillRectangle(Brushes.White,0,0,karte.Width,karte.Height); // - TODO, durch Hintergrund ersetzen
 
             foreach(KartenObjekt obj in kartenObjekte)
             {
-                Pen stiftZuBenutzen = stift;
-                pinsel = new SolidBrush(Color.FromKnownColor(KnownColor.Black));
 
-                if (obj.Label.Contains("Debug"))
-                    stiftZuBenutzen = stiftDebug;
-                if (obj.Label.Contains("KNOTENPUNKT BESETZT"))
+                if(obj.Sprite != null)
                 {
-                    stiftZuBenutzen = stiftBesetzt;
-                    pinsel = new SolidBrush(Color.FromKnownColor(KnownColor.Pink));
+                    grafik.DrawImage(obj.Sprite.GrafikAngepasst((int)VonGridNachPixelKonvertieren(obj.Groesse).X, (int)VonGridNachPixelKonvertieren(obj.Groesse).Y), VonGridNachPixelKonvertieren(obj.Position).X, VonGridNachPixelKonvertieren(obj.Position).Y);
+                    grafik.DrawString(obj.Label, new Font(SystemFonts.DefaultFont, FontStyle.Bold), pinsel, new PointF(VonGridNachPixelKonvertieren(obj.Position).X + (VonGridNachPixelKonvertieren(obj.Groesse).X / 2), VonGridNachPixelKonvertieren(obj.Position).Y + (VonGridNachPixelKonvertieren(obj.Groesse).Y / 2)));
                 }
+                else
+                {
+                    Pen stiftZuBenutzen = stift;
+                    pinsel = new SolidBrush(Color.FromKnownColor(KnownColor.Black));
+
+                    if (obj.Label.Contains("Debug"))
+                        stiftZuBenutzen = stiftDebug;
+                    if (obj.Label.Contains("KNOTENPUNKT BESETZT"))
+                    {
+                        stiftZuBenutzen = stiftBesetzt;
+                        pinsel = new SolidBrush(Color.FromKnownColor(KnownColor.Pink));
+                    }
 
 
                     if (obj.Typ == "NaviLinie")
-                {
-                    grafik.DrawLine(stiftZuBenutzen, VonGridNachPixelKonvertieren(obj.Position).X, VonGridNachPixelKonvertieren(obj.Position).Y, VonGridNachPixelKonvertieren(obj.Groesse).X, VonGridNachPixelKonvertieren(obj.Groesse).Y);
-                }
-                else 
-                {
-                    grafik.DrawRectangle(stiftZuBenutzen, VonGridNachPixelKonvertieren(obj.Position).X, VonGridNachPixelKonvertieren(obj.Position).Y, VonGridNachPixelKonvertieren(obj.Groesse).X, VonGridNachPixelKonvertieren(obj.Groesse).Y);
-                    grafik.DrawString(obj.Label, new Font(SystemFonts.DefaultFont, FontStyle.Bold), pinsel, new PointF(VonGridNachPixelKonvertieren(obj.Position).X + (VonGridNachPixelKonvertieren(obj.Groesse).X / 2), VonGridNachPixelKonvertieren(obj.Position).Y + (VonGridNachPixelKonvertieren(obj.Groesse).Y / 2)));
+                    {
+                        grafik.DrawLine(stiftZuBenutzen, VonGridNachPixelKonvertieren(obj.Position).X, VonGridNachPixelKonvertieren(obj.Position).Y, VonGridNachPixelKonvertieren(obj.Groesse).X, VonGridNachPixelKonvertieren(obj.Groesse).Y);
+                    }
+                    else
+                    {
+                        grafik.DrawRectangle(stiftZuBenutzen, VonGridNachPixelKonvertieren(obj.Position).X, VonGridNachPixelKonvertieren(obj.Position).Y, VonGridNachPixelKonvertieren(obj.Groesse).X, VonGridNachPixelKonvertieren(obj.Groesse).Y);
+                        grafik.DrawString(obj.Label, new Font(SystemFonts.DefaultFont, FontStyle.Bold), pinsel, new PointF(VonGridNachPixelKonvertieren(obj.Position).X + (VonGridNachPixelKonvertieren(obj.Groesse).X / 2), VonGridNachPixelKonvertieren(obj.Position).Y + (VonGridNachPixelKonvertieren(obj.Groesse).Y / 2)));
+                    }
+
                 }                
             }
 
@@ -138,6 +148,8 @@ namespace HandelsNavigator.Karten
 
             return angepeilterPixel;
         }
+
+
 
         public void ObjektHinzufügen(KartenObjekt obj)
         {
