@@ -165,9 +165,6 @@ namespace HandelsNavigator.Karten
                 .Where(knotenpunkt => knotenpunkt.Y >= 0 && knotenpunkt.Y <= maxY)
                 .Where(knotenpunkt => knotenpunkt.Besetzt == false || (knotenpunkt.X == zielKnotenpunkt.X && knotenpunkt.Y == zielKnotenpunkt.Y))
                 .ToList();
-
-
-            return new List<NavigationsKnotenpunkt>();
         }
 
 
