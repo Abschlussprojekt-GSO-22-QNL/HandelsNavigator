@@ -1,26 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Text;
 
 namespace HandelsNavigator.Suchleiste
 {
     public class Suchleiste 
     {
-        public Suchleiste()
+
+        ListBox listbox = null;
+        string cn_string = "";
+
+
+        public Suchleiste(ListBox listbox)
         {
-           
+            this.listbox = listbox;           
         }
 
         private void Suchleiste_Load(object sender, EventArgs e)
         {
             // TODO: Diese Codezeile lädt Daten in die Tabelle "dbProdukteDataSet.Table". Sie können sie bei Bedarf verschieben oder entfernen.
-            this.tableTableAdapter.Fill(this.dbProdukteDataSet.Table);
+            //this.tableTableAdapter.Fill(this.dbProdukteDataSet.Table); //?????
             Liste_Laden();
         }
 
         private void Liste_Laden()
         {
-            string cn_string = Properties.Settings.Default.AppConnectionString;
+            cn_string = ""; // TODO: DATENBANK VERKNÜPFEN
             SqlConnection cn = new SqlConnection(cn_string);
             string sql_Text = "SELECT IdProdukt, Name, Preis, Details FROM dbo.[Table]";
             SqlDataAdapter sql_adapt = new SqlDataAdapter(sql_Text, cn);
@@ -28,15 +35,17 @@ namespace HandelsNavigator.Suchleiste
             sql_adapt.Fill(tblData);
 
             //Anzeigen
-            lbxListe.DisplayMember = "Name";
-            lbxListe.ValueMember = "[Preis]";
-            lbxListe.DataSource = tblData;
+            listbox.DisplayMember = "Name";
+            listbox.ValueMember = "[Preis]";
+            listbox.DataSource = tblData;
+
+            cn.Close();
 
         }
-        private void ProduktInListe_Suchen()
+        private DataTable ProduktInListe_Suchen(string text)
         {
-            string produkt = "%" + tbxSuchleiste.Text + "%";
-            string cn_string = Properties.Settings.Default.AppConnectionString;
+            string produkt = "%" + text + "%";
+            cn_string = ""; // TODO: DATENBANK VERKNÜPFEN
             SqlConnection cn = new SqlConnection(cn_string);
             string sql_Text = "SELECT IdProdukt, Name, Preis, Details FROM[Table] WHERE(Name like N'" + produkt + "')";
 
@@ -45,28 +54,31 @@ namespace HandelsNavigator.Suchleiste
             sql_adapt.Fill(tblData);
 
             //Anzeigen
-            lbxListe.DisplayMember = "Name";
-            lbxListe.ValueMember = "[Preis]";
-            lbxListe.DataSource = tblData;
+            //lbxListe.DisplayMember = "Name";
+            //lbxListe.ValueMember = "[Preis]";
+            //lbxListe.DataSource = tblData;
+            cn.Close();
+
+            return tblData;
 
         }
 
-        private void tbxSuchleiste_TextChanged(object sender, EventArgs e)
-        {
-            ProduktInListe_Suchen();
-        }
+        //private void tbxSuchleiste_TextChanged(object sender, EventArgs e)
+        //{
+        //    ProduktInListe_Suchen();
+        //}
 
-        private void fillByToolStripButton_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                this.tableTableAdapter.FillBy(this.dbProdukteDataSet.Table);
-            }
-            catch (System.Exception ex)
-            {
-                System.Windows.Forms.MessageBox.Show(ex.Message);
-            }
+        //private void fillByToolStripButton_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        this.tableTableAdapter.FillBy(this.dbProdukteDataSet.Table);
+        //    }
+        //    catch (System.Exception ex)
+        //    {
+        //        System.Windows.Forms.MessageBox.Show(ex.Message);
+        //    }
 
-        }
+        //}
     }
 }

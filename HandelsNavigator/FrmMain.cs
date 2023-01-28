@@ -4,10 +4,10 @@ using System.Numerics;
 
 namespace HandelsNavigator
 {
-    public partial class Form1 : Form
+    public partial class FrmMain : Form
     {
         private KartenManager manager;
-        public Form1()
+        public FrmMain()
         {
             InitializeComponent();
         }
@@ -57,7 +57,7 @@ namespace HandelsNavigator
             
 
 
-            PCBTest.Image =  manager.KarteNeuDarstellen();
+            PcbKarte.Image =  manager.KarteNeuDarstellen();
 
             Debug.WriteLine("Joa");
 
