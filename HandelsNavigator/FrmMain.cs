@@ -66,13 +66,16 @@ namespace HandelsNavigator
 
             cn_string = csb.ToString();
 
+            RegaleHinzufuegen();
+            manager.KarteNeuDarstellen();
+
         }
 
 
         public Produkt ProduktLaden(string produkt)
         {
             MySqlConnection cn = new MySqlConnection(cn_string);
-            string sql_Text = "SELECT name,typ,preis, OrtX, OrtY FROM ProduktOrten WHERE(Name like N'" + produkt + "')";
+            string sql_Text = "SELECT name,Kartenname,preis, OrtX, OrtY FROM ProduktOrten WHERE(Name like N'" + produkt + "')";
 
             MySqlDataAdapter sql_adapt = new MySqlDataAdapter(sql_Text, cn);
             DataTable tblData = new DataTable(sql_Text);
@@ -86,7 +89,7 @@ namespace HandelsNavigator
 
             if (tblData.Rows.Count > 0)
             {
-                return new Produkt((string)tblData.Rows[0]["name"], (string)tblData.Rows[0]["typ"], Convert.ToDouble(tblData.Rows[0]["preis"]), new Vector2(Convert.ToSingle(tblData.Rows[0]["OrtX"]), Convert.ToSingle(tblData.Rows[0]["OrtY"])));
+                return new Produkt((string)tblData.Rows[0]["name"], (string)tblData.Rows[0]["Kartenname"], Convert.ToDouble(tblData.Rows[0]["preis"]), new Vector2(Convert.ToSingle(tblData.Rows[0]["OrtX"]), Convert.ToSingle(tblData.Rows[0]["OrtY"])));
             }
             else
             {
@@ -98,26 +101,27 @@ namespace HandelsNavigator
         {
             Bitmap Regal = HandelsNavigator.Properties.Resources.Regal;
 
-            KartenObjekt testObjekt = new KartenObjekt(new Vector2(0.5f, 0.2f), new Vector2(0.2f, 0.1f), "Test-Objekt 1", "Regal", new Sprite(Regal));
-            manager.ObjektHinzufügen(testObjekt);
-            testObjekt = new KartenObjekt(new Vector2(0.1f, 0.5f), new Vector2(0.4f, 0.1f), "Test-Objekt 2", "Regal", new Sprite(Regal));
-            manager.ObjektHinzufügen(testObjekt);
-            testObjekt = new KartenObjekt(new Vector2(0.2f, 0.0f), new Vector2(0.1f, 0.3f), "Test-Objekt 3", "Regal", new Sprite(Regal));
-            manager.ObjektHinzufügen(testObjekt);
-            testObjekt = new KartenObjekt(new Vector2(0.6f, 0.3f), new Vector2(0.1f, 0.7f), "Test-Objekt 4", "Regal", new Sprite(Regal));
-            manager.ObjektHinzufügen(testObjekt);
-            testObjekt = new KartenObjekt(new Vector2(0.7f, 0.3f), new Vector2(0.1f, 0.1f), "Test-Objekt 5", "Regal", new Sprite(Regal)); ;
-            manager.ObjektHinzufügen(testObjekt);
-            testObjekt = new KartenObjekt(new Vector2(0.8f, 0.5f), new Vector2(0.1f, 0.1f), "Test-Objekt 6", "Regal", new Sprite(Regal)); ;
-            manager.ObjektHinzufügen(testObjekt);
-            testObjekt = new KartenObjekt(new Vector2(0.7f, 0.7f), new Vector2(0.1f, 0.1f), "Test-Objekt 7", "Regal", new Sprite(Regal)); ;
-            manager.ObjektHinzufügen(testObjekt);
-            testObjekt = new KartenObjekt(new Vector2(0.0f, 0.6f), new Vector2(0.1f, 0.1f), "Test-Objekt 8", "Regal", new Sprite(Regal)); ;
-            manager.ObjektHinzufügen(testObjekt);
-            testObjekt = new KartenObjekt(new Vector2(0.4f, 0.6f), new Vector2(0.1f, 0.1f), "Test-Objekt 9", "Regal", new Sprite(Regal)); ;
-            manager.ObjektHinzufügen(testObjekt);
-            testObjekt = new KartenObjekt(new Vector2(0.95f, 0.0f), new Vector2(0.1f, 1f), "Test-Objekt 10", "Regal", new Sprite(Regal)); ;
-            manager.ObjektHinzufügen(testObjekt);
+            MySqlConnection cn = new MySqlConnection(cn_string);
+            string sql_Text = "SELECT * FROM KartenObjekte";
+
+            MySqlDataAdapter sql_adapt = new MySqlDataAdapter(sql_Text, cn);
+            DataTable tblData = new DataTable(sql_Text);
+            sql_adapt.Fill(tblData);
+
+            //Anzeigen
+            //lbxListe.DisplayMember = "Name";
+            //lbxListe.ValueMember = "[Preis]";
+            //lbxListe.DataSource = tblData;
+            cn.Close();
+
+            if (tblData.Rows.Count > 0)
+            {
+                foreach(DataRow r in tblData.Rows)
+                {
+                    KartenObjekt ObjektZumHinzufuegen = new KartenObjekt(new Vector2(Convert.ToSingle(r["OrtX"]), Convert.ToSingle(r["OrtY"])), new Vector2(Convert.ToSingle(r["GroeßeX"]), Convert.ToSingle(r["GroeßeY"])), r["KartenName"].ToString(), "Regal", new Sprite(Regal));
+                    manager.ObjektHinzufügen(ObjektZumHinzufuegen);
+                }
+            }
         }
 
 
