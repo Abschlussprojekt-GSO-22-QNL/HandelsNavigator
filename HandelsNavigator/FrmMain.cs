@@ -24,7 +24,7 @@ namespace HandelsNavigator
 
         string cn_string = "Server=joigoing.duckdns.org; Database=navigator; Uid=navigator; Pwd = Wilde3377!;";
 
-        public Vector2 StationsStandort = new Vector2(0.5f, 0.5f);
+        public Vector2 StationsStandort = new Vector2(0.1f, 0.1f);
 
         public FrmMain()
         {
