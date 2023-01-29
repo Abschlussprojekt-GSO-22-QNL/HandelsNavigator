@@ -138,7 +138,7 @@ namespace HandelsNavigator
                 manager.PfadDarstellen(StationsStandort, new Vector2(produkt.Position.X, produkt.Position.Y));
                 PcbKarte.Image = manager.KarteNeuDarstellen();
 
-                RTbxProduktdetails.Rtf = $"{{\\rtf1\\pc \\b {produkt.Name} \\b0 \\par {produkt.Typ} \\par \\i Preis: \\i0 {produkt.Preis}€ \\par \\par \\par Bitte achten Sie links auf die Karten-Darstellung um Ihr gewünschtes Produkt zu finden.}}";
+                RTbxProduktdetails.Rtf = $"{{\\rtf1\\pc \\qc \\b {produkt.Name} \\b0 \\par {produkt.Typ} \\par \\i Preis: \\i0 {produkt.Preis}€ \\par \\par \\par Bitte achten Sie links auf die Karten-Darstellung um Ihr gewünschtes Produkt zu finden.}}";
 
             }
 
