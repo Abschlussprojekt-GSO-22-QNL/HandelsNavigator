@@ -67,7 +67,7 @@ namespace HandelsNavigator
             cn_string = csb.ToString();
 
             RegaleHinzufuegen();
-            manager.KarteNeuDarstellen();
+            PcbKarte.Image = manager.KarteNeuDarstellen();
 
         }
 
