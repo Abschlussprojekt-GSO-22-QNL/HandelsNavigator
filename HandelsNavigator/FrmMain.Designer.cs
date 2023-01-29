@@ -34,9 +34,11 @@
             this.PnlKarte = new System.Windows.Forms.Panel();
             this.PcbKarte = new System.Windows.Forms.PictureBox();
             this.PnlInfos = new System.Windows.Forms.Panel();
+            this.RTbxProduktdetails = new System.Windows.Forms.RichTextBox();
             this.PnlSuchleiste.SuspendLayout();
             this.PnlKarte.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PcbKarte)).BeginInit();
+            this.PnlInfos.SuspendLayout();
             this.SuspendLayout();
             // 
             // PnlSuchleiste
@@ -80,7 +82,7 @@
             this.PnlKarte.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PnlKarte.Location = new System.Drawing.Point(0, 87);
             this.PnlKarte.Name = "PnlKarte";
-            this.PnlKarte.Size = new System.Drawing.Size(600, 363);
+            this.PnlKarte.Size = new System.Drawing.Size(500, 363);
             this.PnlKarte.TabIndex = 2;
             // 
             // PcbKarte
@@ -88,18 +90,30 @@
             this.PcbKarte.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PcbKarte.Location = new System.Drawing.Point(0, 0);
             this.PcbKarte.Name = "PcbKarte";
-            this.PcbKarte.Size = new System.Drawing.Size(598, 361);
+            this.PcbKarte.Size = new System.Drawing.Size(498, 361);
             this.PcbKarte.TabIndex = 0;
             this.PcbKarte.TabStop = false;
             // 
             // PnlInfos
             // 
             this.PnlInfos.BackColor = System.Drawing.SystemColors.Control;
+            this.PnlInfos.Controls.Add(this.RTbxProduktdetails);
             this.PnlInfos.Dock = System.Windows.Forms.DockStyle.Right;
-            this.PnlInfos.Location = new System.Drawing.Point(600, 87);
+            this.PnlInfos.Location = new System.Drawing.Point(500, 87);
+            this.PnlInfos.MinimumSize = new System.Drawing.Size(300, 0);
             this.PnlInfos.Name = "PnlInfos";
-            this.PnlInfos.Size = new System.Drawing.Size(200, 363);
+            this.PnlInfos.Size = new System.Drawing.Size(300, 363);
             this.PnlInfos.TabIndex = 1;
+            // 
+            // RTbxProduktdetails
+            // 
+            this.RTbxProduktdetails.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.RTbxProduktdetails.Font = new System.Drawing.Font("Segoe UI", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.RTbxProduktdetails.Location = new System.Drawing.Point(0, 0);
+            this.RTbxProduktdetails.Name = "RTbxProduktdetails";
+            this.RTbxProduktdetails.Size = new System.Drawing.Size(300, 363);
+            this.RTbxProduktdetails.TabIndex = 0;
+            this.RTbxProduktdetails.Text = "";
             // 
             // FrmMain
             // 
@@ -117,6 +131,7 @@
             this.PnlSuchleiste.PerformLayout();
             this.PnlKarte.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.PcbKarte)).EndInit();
+            this.PnlInfos.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -129,5 +144,6 @@
         private Panel PnlInfos;
         private TextBox TbxSuchleiste;
         private ListBox LsbVorschlaege;
+        private RichTextBox RTbxProduktdetails;
     }
 }

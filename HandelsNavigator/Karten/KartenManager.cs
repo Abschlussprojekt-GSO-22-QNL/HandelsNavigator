@@ -168,6 +168,11 @@ namespace HandelsNavigator.Karten
             }
         }
 
+        public void ObjekteAlleEntfernen()
+        {
+            kartenObjekte = new List<KartenObjekt>();
+        }
+
         public void DebugLinienHinzufuegen()
         {
             //Vertikal
@@ -211,11 +216,6 @@ namespace HandelsNavigator.Karten
             var startKnotenpunkt = NahstenKnotenpunktFinden(start);
             var zielKnotenpunkt = NahstenKnotenpunktFinden(ziel);
 
-            KartenObjekt objDebug = new KartenObjekt(new Vector2(startKnotenpunkt.X,startKnotenpunkt.Y), new Vector2(0.01f, 0.01f), "DEBUG START");
-            kartenObjekte.Add(objDebug);
-            objDebug = new KartenObjekt(new Vector2(zielKnotenpunkt.X, zielKnotenpunkt.Y), new Vector2(0.01f, 0.01f), "DEBUG ENDE");
-            kartenObjekte.Add(objDebug);
-
             pfad = astar.PfadBerechnen(startKnotenpunkt,zielKnotenpunkt);
 
             if (pfad != null)
@@ -241,47 +241,6 @@ namespace HandelsNavigator.Karten
                 //throw new Exception("Route nicht kalkulierbar!");
                 MessageBox.Show("Nicht möglich.");
             }
-
-            if(!DebugKnotenpunkteZeigen)
-                if (astar.NichtGefundeneNachbarn.Count > 0)
-                {
-                    for (int i = 0; i < astar.NichtGefundeneNachbarn.Count - 1; i++)
-                    {
-
-                        KartenObjekt objFehlerKnoten = new KartenObjekt(new Vector2(0f, 0f), new Vector2(0f, 0f), "");
-
-
-                       objFehlerKnoten = new KartenObjekt(new Vector2(astar.NichtGefundeneNachbarn[i].X, astar.NichtGefundeneNachbarn[i].Y), new Vector2(0.01f, 0.01f), $"Nicht gefunden {i}FN", "NICHT GEFUNDENER KNOTENPUNKT");
-
-
-                        kartenObjekte.Add(objFehlerKnoten);
-                    }
-                }
-                else
-                {
-                    Debug.WriteLine("Alle Nachbarn gefunden :)");
-                }
-            if (astar.NichtBetretbareNachbarn.Count > 0)
-            {
-                for (int i = 0; i < astar.NichtBetretbareNachbarn.Count - 1; i++)
-                {
-
-                    KartenObjekt objFehlerKnoten = new KartenObjekt(new Vector2(0f, 0f), new Vector2(0f, 0f), "");
-
-
-                    objFehlerKnoten = new KartenObjekt(new Vector2(astar.NichtBetretbareNachbarn[i].X, astar.NichtBetretbareNachbarn[i].Y), new Vector2(0.01f, 0.01f), $"Nicht gefunden {i}FN", "NICHT BETRETBARER KNOTENPUNKT");
-
-
-                    kartenObjekte.Add(objFehlerKnoten);
-                }
-            }
-            else
-            {
-                Debug.WriteLine("Alle Nachbarn gefunden :)");
-            }
-
-
-
         }
 
         private NavigationsKnotenpunkt NahstenKnotenpunktFinden(Vector2 vec)
