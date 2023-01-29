@@ -111,6 +111,7 @@
             this.RTbxProduktdetails.Font = new System.Drawing.Font("Segoe UI", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.RTbxProduktdetails.Location = new System.Drawing.Point(0, 0);
             this.RTbxProduktdetails.Name = "RTbxProduktdetails";
+            this.RTbxProduktdetails.ReadOnly = true;
             this.RTbxProduktdetails.Size = new System.Drawing.Size(300, 363);
             this.RTbxProduktdetails.TabIndex = 0;
             this.RTbxProduktdetails.Text = "";
